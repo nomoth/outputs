@@ -6,7 +6,7 @@ import (
 
 	"gopkg.in/alecthomas/kingpin.v2"
 
-	"outputs/ipc"
+	"github.com/nomoth/outputs/ipc"
 )
 
 var (
