@@ -3,10 +3,10 @@ package main
 import (
 	"fmt"
 	"log"
+	"os"
 
+	"github.com/nomoth/ipc"
 	"gopkg.in/alecthomas/kingpin.v2"
-
-	"github.com/nomoth/outputs/ipc"
 )
 
 var (
@@ -16,7 +16,10 @@ var (
 
 func main() {
 	kingpin.Parse()
-	conn := ipc.NewConnection()
+	conn, err := ipc.NewConnection()
+	if err != nil {
+		fatalError("Impossible to connect to sway. Is sway running?")
+	}
 	defer conn.Close()
 	list, err := conn.GetOutputs()
 	if err != nil {
@@ -58,4 +61,9 @@ func listOutputs(conn *ipc.Connection, available []*ipc.Output) {
 			fmt.Printf("%s disabled\n", o.Name)
 		}
 	}
+}
+
+func fatalError(msg string) {
+	_,_ = fmt.Fprintln( os.Stderr,msg)
+	os.Exit(1)
 }
